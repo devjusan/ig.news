@@ -26,7 +26,7 @@ export default function Home({ product }: HomeProps) {
           </h1>
           <p>
             Get acess to all the publications <br />
-            <span>for ${product.amount}</span>
+            <span>for {product.amount}</span>
           </p>
           <SubscribeButton priceId={product.priceId} />
         </section>
