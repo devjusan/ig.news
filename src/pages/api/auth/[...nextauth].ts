@@ -12,14 +12,16 @@ export default NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    signIn: async (payload) => {
-      const { email } = payload.user;
+    async signIn({ user }) {
+      const { email } = user;
 
       try {
         await fauna.query(q.Create(q.Collection("users"), { data: { email } }));
 
         return true;
       } catch (error) {
+        console.log(error);
+
         return false;
       }
     },
