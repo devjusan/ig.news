@@ -1,5 +1,5 @@
 #container {
-  position: fixed;
+  position: fixed !important;
   left: 3rem;
   bottom: 3rem;
 
@@ -17,6 +17,11 @@
   border: 1px solid #333;
 
   animation: left-to-right 300ms forwards ease-in-out;
+  transition: filter 0.2s ease;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
 }
 
 #container p {

@@ -37,14 +37,16 @@ export const SubscribeButton = ({ priceId }: ISubscribeButtonProps) => {
   }, []);
 
   return (
-    <button
-      type="button"
-      className={styles.subscribeButton}
-      onClick={handleSubscribe}
-    >
-      {" "}
-      subscribe now
+    <>
+      <button
+        type="button"
+        className={styles.subscribeButton}
+        onClick={handleSubscribe}
+      >
+        {" "}
+        subscribe now
+      </button>
       {error && <Toast message="Ocorreu um erro na requisição" error />}
-    </button>
+    </>
   );
 };
