@@ -1,7 +1,7 @@
 import { signIn, useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
-import axios from "../../services/axios";
+import api from "../../services/api";
 import getStripeJs from "../../services/browser-stripe";
 import { Toast } from "../toast";
 
@@ -19,18 +19,24 @@ export const SubscribeButton = ({ priceId }: ISubscribeButtonProps) => {
       return;
     }
 
+    await handleRequest();
+  }, [session]);
+
+  const handleRequest = async () => {
     try {
-      const response = await axios.post("/checkout");
+      const response = await api.post("/checkout");
+      const stripe = await getStripeJs();
 
       const { sessionId } = response.data;
 
-      const stripe = await getStripeJs();
-
-      await stripe.redirectToCheckout(sessionId);
+      await stripe.redirectToCheckout({ sessionId });
+      setError(false);
     } catch (error) {
+      console.log(error.message);
+
       setError(true);
     }
-  }, [session]);
+  };
 
   useEffect(() => {
     return () => setError(false);

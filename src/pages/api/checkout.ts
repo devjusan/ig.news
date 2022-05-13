@@ -4,8 +4,8 @@ import { stripe } from "../../services/stripe";
 
 const checkout = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
-    const { user } = await getSession({ req });
-    const { email } = user;
+    const session = await getSession({ req });
+    const { email } = session.user;
 
     const stripeCustomer = await stripe.customers.create({ email });
     const stripeCheckoutSession = await stripe.checkout.sessions.create({
