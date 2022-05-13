@@ -16,6 +16,9 @@
     z-index: 2;
     border-radius: .8rem;
     border: 1px solid #333;   
+
+    animation: left-to-right 300ms forwards ease-in-out;
+
 }
 
 #container p {
@@ -24,12 +27,22 @@
     margin-top: 0;
 }
 
-#container .error {
+#container.error {
     background:var(--error);
 }
 
-#container .success {
+#container.success {
     background:var(--success);
+}
+
+@keyframes left-to-right {
+    0% {
+        left: -40rem
+    }
+
+    100% {
+        left: 3rem
+    }
 }
 
 
