@@ -1,0 +1,32 @@
+.container {
+    position: fixed;
+    left: 3rem;
+    bottom: 3rem;
+
+    max-width: 35rem;
+    height: 100%;
+    padding: 2rem 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    z-index: 2;
+   
+}
+
+.container p {
+    font-size: 1.4rem;
+    line-height: .5rem;
+    color: var(--white);
+}
+
+.container.error {
+    background:var(--error);
+}
+
+.container.success {
+    background:var(--success);
+}
+
+

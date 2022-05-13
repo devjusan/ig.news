@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
-import { stripe } from "../../../services/stripe";
+import { stripe } from "../../services/stripe";
 
 const checkout = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
