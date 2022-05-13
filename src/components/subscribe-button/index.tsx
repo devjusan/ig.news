@@ -1,5 +1,5 @@
 import { signIn, useSession } from "next-auth/react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import axios from "../../services/axios";
 import getStripeJs from "../../services/browser-stripe";
@@ -31,6 +31,10 @@ export const SubscribeButton = ({ priceId }: ISubscribeButtonProps) => {
       setError(true);
     }
   }, [session]);
+
+  useEffect(() => {
+    return () => setError(false);
+  }, []);
 
   return (
     <button
