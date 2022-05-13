@@ -1,5 +1,5 @@
 import { signIn, useSession } from "next-auth/react";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import styles from "./styles.module.scss";
 import axios from '../../services/axios'
 import getStripeJs from "../../services/browser-stripe";
@@ -13,6 +13,7 @@ interface ISubscribeButtonProps {
 
 
 export const SubscribeButton = ({ priceId }: ISubscribeButtonProps) =>  {
+  const [error, setError] = useState(false)
   const { data: session, status } = useSession();
 
   const handleSubscribe = useCallback(async () => {
@@ -30,17 +31,16 @@ export const SubscribeButton = ({ priceId }: ISubscribeButtonProps) =>  {
       
       await stripe.redirectToCheckout(sessionId)
 
-      return <Toast message='Ocorreu um erro na requisição' error />
 
 
     } catch (error) {
-      return <Toast message='Ocorreu um erro na requisição' error />
+      setError(true)
     }
 
   }, [session])
 
 
-  return <button type="button" className={styles.subscribeButton} onClick={handleSubscribe} >
+  return error ? <Toast message='Ocorreu um erro na requisição' error />: <button type="button" className={styles.subscribeButton} onClick={handleSubscribe} >
   {" "}
   subscribe now
 </button>

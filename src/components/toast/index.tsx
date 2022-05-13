@@ -18,6 +18,6 @@ export function Toast({message, error}: IToast) {
     }
 
   return (
-    timer < 6 ? error ? <aside id='container' className={styles.error}><p>{message}</p></aside> : <aside id='container' className={styles.success}><p>{message}</p></aside> : null
+    timer < 6 ? error ? <aside id={styles.container} className={styles.error}><p>{message}</p></aside> : <aside id={styles.container} className={styles.success}><p>{message}</p></aside> : null
   );
 }
