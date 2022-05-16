@@ -2,8 +2,8 @@ import { Stripe } from "stripe";
 import { NextApiResponse, NextApiRequest } from "next";
 import { Readable } from "stream";
 import { stripe } from "../../services/stripe";
-import { CHECKOUT } from "../../utils/stripe.utils";
 import { saveSubscription } from "./_lib/manage-subscription";
+import StripeUtils from "../../utils/stripe.utils";
 
 async function buffer(readable: Readable) {
   const chunks = [];
@@ -14,8 +14,6 @@ async function buffer(readable: Readable) {
 
   return Buffer.concat(chunks);
 }
-
-const relevantEvents = new Set([CHECKOUT.SESSION_COMPLETED]);
 
 const webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "POST") {
@@ -34,10 +32,10 @@ const webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     const { type } = event;
 
-    if (relevantEvents.has(type)) {
+    if (StripeUtils.has(type)) {
       try {
         switch (type) {
-          case CHECKOUT.SESSION_COMPLETED:
+          case StripeUtils.CHECKOUT.SESSION_COMPLETED:
             const checkoutSession = event.data
               .object as Stripe.Checkout.Session;
             await saveSubscription(
