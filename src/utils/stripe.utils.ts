@@ -8,6 +8,7 @@ class StripeUtils {
   static CUSTOMER = {
     UPDATED: "customer.subscription.updated",
     DELETED: "customer.subscription.deleted",
+    CREATED: "customer.subscription.created",
   };
 
   static has = (type: string) => this.relevantEvents.has(type);

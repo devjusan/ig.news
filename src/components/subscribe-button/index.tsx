@@ -4,23 +4,29 @@ import styles from "./styles.module.scss";
 import api from "../../services/api";
 import getStripeJs from "../../services/browser-stripe";
 import { Toast } from "../toast";
+import { useRouter } from "next/router";
 
 interface ISubscribeButtonProps {
   priceId: string;
 }
 
 export const SubscribeButton = ({ priceId }: ISubscribeButtonProps) => {
+  const { push } = useRouter();
   const [error, setError] = useState(false);
-  const { data: session, status } = useSession();
-
+  const { data: session } = useSession();
   const handleSubscribe = useCallback(async () => {
     if (!session) {
       signIn("github");
       return;
     }
 
+    if (session.activeSubscription) {
+      push("posts");
+      return;
+    }
+
     await handleRequest();
-  }, [session]);
+  }, [push, session]);
 
   const handleRequest = async () => {
     try {
@@ -32,8 +38,6 @@ export const SubscribeButton = ({ priceId }: ISubscribeButtonProps) => {
       await stripe.redirectToCheckout({ sessionId });
       setError(false);
     } catch (error) {
-      console.log(error.message);
-
       setError(true);
     }
   };
