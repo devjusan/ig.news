@@ -8,10 +8,7 @@ class StripeUtils {
   static CUSTOMER = {
     UPDATED: "customer.subscription.updated",
     DELETED: "customer.subscription.deleted",
-  };
-
-  static PAYMENT = {
-    SUCCESS: "payment_intent.succeeded",
+    CREATED: "customer.subscription.created",
   };
 
   static has = (type: string) => this.relevantEvents.has(type);
@@ -20,7 +17,7 @@ class StripeUtils {
     this.CHECKOUT.SESSION_COMPLETED,
     this.CUSTOMER.DELETED,
     this.CUSTOMER.UPDATED,
-    this.PAYMENT,
+    this.CUSTOMER.CREATED,
   ]);
 }
 

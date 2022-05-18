@@ -36,9 +36,7 @@ const webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         const { id, customer } = event.data.object as Stripe.Subscription;
         switch (type) {
-          case StripeUtils.PAYMENT.SUCCESS:
-            await saveSubscription(id, customer.toString());
-            break;
+          case StripeUtils.CUSTOMER.CREATED:
           case StripeUtils.CUSTOMER.DELETED:
           case StripeUtils.CUSTOMER.UPDATED:
             await saveSubscription(id, customer.toString());
