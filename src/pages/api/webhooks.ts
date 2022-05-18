@@ -34,14 +34,14 @@ const webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (StripeUtils.has(type)) {
       try {
+        const { id, customer } = event.data.object as Stripe.Subscription;
         switch (type) {
-          case StripeUtils.CUSTOMER.CREATED:
-            const { id, customer } = event.data.object as Stripe.Subscription;
+          case StripeUtils.PAYMENT.SUCCESS:
             await saveSubscription(id, customer.toString());
             break;
           case StripeUtils.CUSTOMER.DELETED:
           case StripeUtils.CUSTOMER.UPDATED:
-            await saveSubscription(id, customer.toString(), true);
+            await saveSubscription(id, customer.toString());
 
             break;
           case StripeUtils.CHECKOUT.SESSION_COMPLETED:
@@ -49,8 +49,7 @@ const webhooks = async (req: NextApiRequest, res: NextApiResponse) => {
               .object as Stripe.Checkout.Session;
             await saveSubscription(
               checkoutSession.subscription.toString(),
-              checkoutSession.customer.toString(),
-              false
+              checkoutSession.customer.toString()
             );
             break;
           default:
