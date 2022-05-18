@@ -1,9 +1,8 @@
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import { createClient } from "../../../prismicio.config";
-import { RichText } from "prismic-dom";
 import styles from "./styles.module.scss";
-import { formatDate } from "../../utils/formatter.utils";
+import { formatPrismicPosts } from "../../utils/formatter.utils";
 
 type Post = {
   slug: string;
@@ -48,15 +47,7 @@ export const getStaticProps: GetStaticProps = async ({ previewData }) => {
     fetchLinks: ["posts.title", "posts.content", "posts.uid"],
     pageSize: 50,
   });
-  const formattedPosts = posts.map((post) => ({
-    slug: post.uid,
-    title: RichText.asText(post.data.title),
-    summary:
-      post.data.content.find(
-        (content: { type: string }) => content.type === "paragraph"
-      ).text ?? "",
-    updatedAt: formatDate(post.last_publication_date),
-  }));
+  const formattedPosts = formatPrismicPosts(posts);
 
   return { props: { posts: formattedPosts }, revalidate: ONE_HOUR };
 };
