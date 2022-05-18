@@ -1,4 +1,4 @@
-import { GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { RichText } from "prismic-dom";
 import { formatDate } from "../../../utils/formatter.utils";
 import { createClient } from "../../../../prismicio.config";
@@ -62,7 +62,7 @@ const PostPreview = ({
 
 export default PostPreview;
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
     fallback: "blocking",
@@ -83,6 +83,7 @@ export const getStaticProps: GetStaticProps = async ({
     content: RichText.asHtml(prismicData.data.content.slice(0, 3)),
     updatedAt: formatDate(prismicData.last_publication_date),
   };
+  const HALF_HOUR = 30 * 60;
 
-  return { props: { post } };
+  return { props: { post }, revalidate: HALF_HOUR };
 };

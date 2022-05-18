@@ -1,4 +1,3 @@
-import { AppProps } from "next/app";
 import { Header } from "../components/header";
 import { SessionProvider } from "next-auth/react";
 import "../styles/global.scss";
@@ -7,7 +6,7 @@ import { linkResolver, repositoryName } from "../../prismicio.config";
 import Link from "next/link";
 import { PrismicPreview } from "@prismicio/next";
 
-function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
     <PrismicProvider
       linkResolver={linkResolver}
