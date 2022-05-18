@@ -1,10 +1,22 @@
-import styles from "./styles.module.scss";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 import { createClient } from "../../../prismicio.config";
-const Posts = ({ page }) => {
-  console.log(page);
+import { RichText } from "prismic-dom";
+import styles from "./styles.module.scss";
+import { formatDate } from "../../utils/formatter.utils";
 
+type Post = {
+  slug: string;
+  title: string;
+  summary: string;
+  updatedAt: string;
+};
+
+interface IProps {
+  posts: Post[];
+}
+
+const Posts = ({ posts }: IProps) => {
   return (
     <>
       <Head>
@@ -13,30 +25,14 @@ const Posts = ({ page }) => {
 
       <main className={styles.container}>
         <div className={styles.postsList}>
-          <a href="#">
-            <time>12 de marco de 2021</time>
-            <strong>Creating a monorepo with Lerna Yrn Workspaces</strong>
-            <p>
-              in this guide kaskdkak a ksdklaoi wi owei owi how to create
-              jdaisjhd h wh uabduabsd b uw uw wu uuwu{" "}
-            </p>
-          </a>
-          <a href="#">
-            <time>12 de marco de 2021</time>
-            <strong>Creating a monorepo with Lerna Yrn Workspaces</strong>
-            <p>
-              in this guide kaskdkak a ksdklaoi wi owei owi how to create
-              jdaisjhd h wh uabduabsd b uw uw wu uuwu{" "}
-            </p>
-          </a>
-          <a href="#">
-            <time>12 de marco de 2021</time>
-            <strong>Creating a monorepo with Lerna Yrn Workspaces</strong>
-            <p>
-              in this guide kaskdkak a ksdklaoi wi owei owi how to create
-              jdaisjhd h wh uabduabsd b uw uw wu uuwu{" "}
-            </p>
-          </a>
+          {" "}
+          {[...posts].map(({ slug, updatedAt, title, summary }) => (
+            <a key={slug} href="#">
+              <time>{updatedAt}</time>
+              <strong>{title}</strong>
+              <p>{summary}</p>
+            </a>
+          ))}
         </div>
       </main>
     </>
@@ -45,12 +41,22 @@ const Posts = ({ page }) => {
 
 export default Posts;
 
-export const getStaticProps: GetStaticProps = async ({
-  params,
-  previewData,
-}) => {
+export const getStaticProps: GetStaticProps = async ({ previewData }) => {
+  const ONE_HOUR = 60 * 30;
   const client = createClient({ previewData });
-  const posts = await client.getAllByType("posts");
+  const posts = await client.getAllByType("posts", {
+    fetchLinks: ["posts.title", "posts.content", "posts.uid"],
+    pageSize: 50,
+  });
+  const formattedPosts = posts.map((post) => ({
+    slug: post.uid,
+    title: RichText.asText(post.data.title),
+    summary:
+      post.data.content.find(
+        (content: { type: string }) => content.type === "paragraph"
+      ).text ?? "",
+    updatedAt: formatDate(post.last_publication_date),
+  }));
 
-  return { props: { posts } };
+  return { props: { posts: formattedPosts }, revalidate: ONE_HOUR };
 };
