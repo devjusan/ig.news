@@ -4,11 +4,12 @@ import { RichText } from "prismic-dom";
 import { formatDate } from "../../utils/formatter.utils";
 import { createClient } from "../../../prismicio.config";
 import Head from "next/head";
-import DOMPurify from "dompurify";
 import styles from "./post.module.scss";
+import DOMPurify from "dompurify";
+import { useCallback } from "react";
 
 interface IPost {
-  prismicPost: {
+  post: {
     slug: string;
     title: string;
     content: string;
@@ -16,18 +17,25 @@ interface IPost {
   };
 }
 
-const Post = ({ prismicPost: { content, slug, title, updatedAt } }: IPost) => {
+const Post = ({ post: { content, slug, title, updatedAt } }: IPost) => {
+  const sanitizedContent = useCallback(() => {
+    return DOMPurify.sanitize(content);
+  }, [content]);
+
   return (
     <>
       <Head>
         <title>{title} | Ignews</title>
       </Head>
 
-      <main>
-        <article>
+      <main className={styles.container}>
+        <article className={styles.post}>
           <h1>{title}</h1>
           <time>{updatedAt}</time>
-          <div dangerouslySetInnerHTML={{ __html: content }}></div>
+          <div
+            className={styles.postContent}
+            dangerouslySetInnerHTML={{ __html: sanitizedContent() }}
+          ></div>
         </article>
       </main>
     </>
@@ -41,17 +49,17 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   previewData,
 }) => {
-  const { slug } = params;
   const session = await getSession({ req });
+  const { slug } = params;
+
   const prismicClient = createClient({ previewData });
   const prismicData = await prismicClient.getByUID("posts", slug.toString());
-
-  const prismicPost = {
-    slug,
+  const post = {
+    slug: slug.toString(),
     title: RichText.asText(prismicData.data.title),
-    content: DOMPurify.sanitize(RichText.asHtml(prismicData.data.content)),
+    content: RichText.asHtml(prismicData.data.content),
     updatedAt: formatDate(prismicData.last_publication_date),
   };
 
-  return { props: prismicPost };
+  return { props: { post } };
 };

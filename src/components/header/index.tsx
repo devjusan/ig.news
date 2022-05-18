@@ -15,7 +15,7 @@ export function Header() {
           priority
         />
         <nav>
-          <ActiveLink activeClassName={styles.active} href="/" prefetch>
+          <ActiveLink activeClassName={styles.active} href="/">
             <a className={styles.active}>Home</a>
           </ActiveLink>
           <ActiveLink activeClassName={styles.active} href="/posts">
