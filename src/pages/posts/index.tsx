@@ -1,5 +1,5 @@
 import { GetStaticProps } from "next";
-import { formatPrismicPosts } from "../../utils/formatter.utils";
+import { formatPrismicPosts } from "../../utils/prismic.utils";
 import { createClient } from "../../../prismicio.config";
 import Head from "next/head";
 import Link from "next/link";
