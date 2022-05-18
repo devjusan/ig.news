@@ -1,8 +1,9 @@
-import Head from "next/head";
 import { GetStaticProps } from "next";
-import { createClient } from "../../../prismicio.config";
-import styles from "./styles.module.scss";
 import { formatPrismicPosts } from "../../utils/formatter.utils";
+import { createClient } from "../../../prismicio.config";
+import Head from "next/head";
+import Link from "next/link";
+import styles from "./styles.module.scss";
 
 type Post = {
   slug: string;
@@ -21,16 +22,17 @@ const Posts = ({ posts }: IProps) => {
       <Head>
         <title>Posts / Ignews</title>
       </Head>
-
       <main className={styles.container}>
         <div className={styles.postsList}>
           {" "}
           {[...posts].map(({ slug, updatedAt, title, summary }) => (
-            <a key={slug} href="#">
-              <time>{updatedAt}</time>
-              <strong>{title}</strong>
-              <p>{summary}</p>
-            </a>
+            <Link key={slug} href={`/posts/${slug}`}>
+              <a key={slug}>
+                <time>{updatedAt}</time>
+                <strong>{title}</strong>
+                <p>{summary}</p>
+              </a>
+            </Link>
           ))}
         </div>
       </main>

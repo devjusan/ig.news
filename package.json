@@ -21,6 +21,7 @@
     "@types/react-dom": "^18.0.4",
     "@types/react-icons": "^3.0.0",
     "axios": "^0.27.2",
+    "dompurify": "^2.3.8",
     "faunadb": "^4.5.4",
     "next": "12.1.1",
     "next-auth": "^4.3.4",
@@ -32,6 +33,7 @@
     "stripe": "^9.0.0"
   },
   "devDependencies": {
+    "@types/dompurify": "^2.3.3",
     "@types/node": "^17.0.23",
     "@types/prismic-dom": "^2.1.1",
     "@types/react": "^17.0.43",
