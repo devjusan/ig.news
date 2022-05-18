@@ -3,10 +3,10 @@ import { getSession } from "next-auth/react";
 import { RichText } from "prismic-dom";
 import { formatDate } from "../../utils/formatter.utils";
 import { createClient } from "../../../prismicio.config";
-import Head from "next/head";
-import styles from "./post.module.scss";
-import DOMPurify from "dompurify";
 import { useCallback } from "react";
+import Head from "next/head";
+import DOMPurify from "isomorphic-dompurify";
+import styles from "./post.module.scss";
 
 interface IPost {
   post: {
@@ -51,6 +51,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const session = await getSession({ req });
   const { slug } = params;
+  console.log(session);
 
   const prismicClient = createClient({ previewData });
   const prismicData = await prismicClient.getByUID("posts", slug.toString());
